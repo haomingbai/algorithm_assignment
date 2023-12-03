@@ -21,7 +21,7 @@ int countline(char *filename)
     ReadFile.open(filename,ios::in);//ios::in 表示以只读的方式读取文件
     if(ReadFile.fail())//文件打开失败:返回0
     {
-        return 0;
+        return -1;
     }
     else//文件存在
     {
@@ -40,9 +40,10 @@ int countline(char *filename)
 int readfile(string filename,int d[][3],int linenum){
 	ifstream fin;
 	fin.open(filename,ios::in);
-	int **n,**p;
+	int **n,**p,**x;
 	n=(int **)malloc(linenum*sizeof(int *));
 	p=n;
+    x=n;
 	for(int i=0;i<linenum;i++){
 		*p=d[i];
 		p++;
@@ -50,12 +51,14 @@ int readfile(string filename,int d[][3],int linenum){
 	int m=0;
 	char buff[32];
 	while(fin.getline(buff,sizeof(buff))){
-		sscanf(buff,"%d %d %d",*n,(*n+1),(*n+2));
+		sscanf(buff,"%d %d %d",*x,(*x+1),(*x+2));
 		//printf("%d %d %d\n",**n,*(*n+1),*(*n+2));//测试用代码
-		if(**n>=m) m=**n;
-		if(*(*n+2)>=m) m=*(*n+2);
-		n++;
+		if(**x>=m) m=**x;
+		if(*(*x+2)>=m) m=*(*x+2);
+		x++;
 	}
+    free(n);
+    fin.close();
 	return m;
 }
 

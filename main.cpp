@@ -12,13 +12,17 @@ using namespace std;
 
 int main(){
 	int linenum=countline("inputfile");
-	int data[linenum][3];
-	int length=readfile("inputfile",data,linenum);
-	//cout<<linenum<<endl;//测试用代码
-	int bitmap[length+1]={0};
-	//cout<<length<<endl;//测试用代码
-	for(int i=0;i<linenum;i++) data_process(bitmap,data[i]);
-	//read_data(bitmap,length+1);//测试用代码
-	key_vector(bitmap,length);
-	return 0;
+	if(linenum!=-1){
+		int data[linenum][3];
+		int length=readfile("inputfile",data,linenum);
+		//cout<<linenum<<endl;//测试用代码
+		int bitmap[length+1]={0};
+		//cout<<length<<endl;//测试用代码
+		for(int i=0;i<linenum;i++) data_process(bitmap,data[i]);
+		//read_data(bitmap,length+1);//测试用代码
+		key_vector(bitmap,length);
+		return 0;
+	}else{
+		return -1;
+	}
 }
