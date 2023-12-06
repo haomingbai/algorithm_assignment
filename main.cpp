@@ -12,6 +12,7 @@ using namespace std;
 
 int main(){
 	int linenum=countline("inputfile");
+	if(linenum==-1) return -1;
 	int data[linenum][3];
 	int length=readfile("inputfile",data,linenum);
 	//cout<<linenum<<endl;//测试用代码

@@ -21,7 +21,7 @@ int countline(char *filename)
     ReadFile.open(filename,ios::in);//ios::in 表示以只读的方式读取文件
     if(ReadFile.fail())//文件打开失败:返回0
     {
-        return 0;
+        return -1;
     }
     else//文件存在
     {
