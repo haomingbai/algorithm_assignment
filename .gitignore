@@ -2,3 +2,6 @@
 !/report/report.tex
 !/report/report.pdf
 !/report/effect.jpg
+!/report/*.png
+!/report/*.cpp
+!/report/*.h

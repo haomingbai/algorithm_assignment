@@ -1,6 +1,24 @@
 \documentclass[a4paper]{ctexart}
 \usepackage{amsmath, amsthm, amssymb, graphicx}
 \usepackage{setspace,tikz}
+
+\usepackage{listings,color}
+
+% 用来设置附录中代码的样式
+
+\lstset{numbers=left, %设置行号位置
+        numberstyle=\tiny, %设置行号大小
+        keywordstyle=\color{blue}, %设置关键字颜色
+        commentstyle=\color[cmyk]{1,0,1,0}, %设置注释颜色
+        frame=single, %设置边框格式
+        escapeinside=``, %逃逸字符(1左面的键)，用于显示中文
+        %breaklines, %自动折行
+        extendedchars=false, %解决代码跨页时，章节标题，页眉等汉字不显示的问题
+        xleftmargin=2em,xrightmargin=2em, aboveskip=1em, %设置边距
+        tabsize=4, %设置tab空格数
+        showspaces=false, %不显示空格
+		breaklines=true
+       }
 %\usepackage[bookmarks=true, colorlinks, citecolor=blue, linkcolor=black]{hyperref}
 
 \usetikzlibrary{positioning, shapes.geometric}
@@ -289,8 +307,27 @@
 		当输入文件有效时，程序正常执行，否则返回255，即返回-1
 	\end{center}
 	加入少量调试代码后，可以清晰地展示出程序的执行流程，效果如下：
+	\begin{center}
+		\includegraphics[width=14cm]{showcase.png}
+	\end{center}
 	\subsection{程序使用说明}
+	将矩形建筑的数据输入inputfile文件中（注意不是inputfile.txt!）。文件的格式如下：
+
+	$[Right\_edge\_1]$ $[Height\_1]$ $[Left\_edge\_1]$
+
+	$[Right\_edge\_2]$ $[Height\_2]$ $[Left\_edge\_2]$
+
+	\dots
+
+	然后输出会被显示在屏幕上，也可以简单修改源代码将其输入到文件当中。
+
 	\subsection{程序开发总结}
+	本次程序设计当中，我较为深入地理解了指针的用法，理解了数组和指针的关系，也明晰了C++中“流”的概念。通过这些知识，我能够更好地掌握C++编程的方法，从而更好地运用在日后的程序设计当中。
+
+	数组和指针本是同源，我们可以用指针的方法访问数组，也可以用数组的方式访问指针，二者可以根据需求自由切换。
 	\section{附件（源程序）}
+	\lstinputlisting[caption=\textbf{file.h},label={file.h}]{file.h}
+	\lstinputlisting[caption=\textbf{algorithm.h},label={algorithm.h}]{algorithm.h}
+	\lstinputlisting[caption=\textbf{main.cpp},label={main.cpp}]{main.cpp}
 
 \end{document}
