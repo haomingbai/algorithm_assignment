@@ -20,6 +20,8 @@ int main(){
 		//cout<<length<<endl;//测试用代码
 		for(int i=0;i<linenum;i++) data_process(bitmap,data[i]);
 		//read_data(bitmap,length+1);//测试用代码
+		//for(int i=0;i<length;i++) cout<<bitmap[i]<<" ";
+		//printf("\n");
 		key_vector(bitmap,length);
 		return 0;
 	}else{

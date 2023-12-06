@@ -52,6 +52,7 @@ int readfile(string filename,int d[][3],int linenum){
 	char buff[32];
 	while(fin.getline(buff,sizeof(buff))){
 		sscanf(buff,"%d %d %d",*x,(*x+1),(*x+2));
+		//cout<<buff<<endl;
 		//printf("%d %d %d\n",**n,*(*n+1),*(*n+2));//测试用代码
 		if(**x>=m) m=**x;
 		if(*(*x+2)>=m) m=*(*x+2);
