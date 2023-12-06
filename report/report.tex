@@ -1,8 +1,9 @@
 \documentclass[a4paper]{ctexart}
 \usepackage{amsmath, amsthm, amssymb, graphicx}
-\usepackage{setspace}
+\usepackage{setspace,tikz}
 %\usepackage[bookmarks=true, colorlinks, citecolor=blue, linkcolor=black]{hyperref}
 
+\usetikzlibrary{positioning, shapes.geometric}
 % 导言区
 
 \title{C++程序设计大作业报告}
@@ -203,9 +204,13 @@
 	本项目的主要功能如下：
 	
 	从一个输入文件读取城市建筑的信息，获取其位置和高度。获得城市的天际线数据，并且将数据简化，得到所需要的向量序列，并且在屏幕上输出。本程序具有模块化，可移植等特性，每个函数都可以被单独引用，相互之间依赖少，结构简单，清晰。
+
+	程序可以使用g++编译器编译运行。
 	\subsection{函数实现}
 	\paragraph{int countline}
 	以文件名或文件路径（C语言风格字符串）作为参数。新建一个输入文件流，命名为ReadFile，一个整数表示文件的行数，根据文件路径打开文件。首先使用.fail函数测试文件路径的有效性，若无效，则返回-1。然后，根据文件流每被读取一次，指针就会向后方移动的特点，使用getline函数操作ReadFile，当getline函数返回非0（非 EOF ）时，我们就让n自增一次，代表读取一行。当读取到EOF之后，关闭文件防止内存泄漏，返回n。
+	
+
 	\paragraph{int readfile}
 	本函数的参数有：C++风格的字符串filename表示文件名，整数型数组d[][3]用于存储数据，整数linenum表示文件行数。在这个函数中，通过数组作为函数形式参数时传递指针常量而非数组数据的特点，实现了返回多值的功能。首先，因为数组的操作不够便利，同时可移植性也不够强，在编写程序时，我先新建三个int ** 指针，名称分别为p，n，x。然后我使用malloc命令给n指针分配内存并将p，x赋值为n以保护n不在后续操作中丢失，造成内存泄露。然后，我通过p将d[n]赋值给*(n+i)。再使用readfile表示文件输入流，整数变量m表示城市的长度（横坐标最大值），利用fin.getline函数，将每行文件：1、输入字符串buff 2、用sscanf输入数据到*(x),*(x+1),*(x+2)，然后令x自增，获取所有数据。在获取数据时，将右侧坐标与m比较，若坐标值大于m，则将m的值变为新的右侧坐标的值。最后，返回m作为城市的长度，也就是天际线的最后一个横坐标 ($v_{n-1}$) 。
 	\paragraph{void dataprocess}
@@ -222,12 +227,68 @@
 	然后我们新建bitmap数组，调用data\_process函数将bitmap绘制完成。
 
 	最后，调用key\_vector函数，输出结果，并返回0表示正常退出。
+
+	函数的主要流程图示如下：
+
+	\begin{center}
+		\begin{tikzpicture}
+			\node[draw,rounded corners]	(begin){Begin};
+			\node[draw,below=20pt of begin]	(countline){Count the line of the input file};
+			\node[draw,below=of countline]	(init){Initialize the base of the city};
+			\node[draw,below=of init]		(skyline){Fetch the bitmap of the skyline};
+			\node[draw,below=of skyline]	(vectorize){Find out the critical vector of the skyline};
+			\node[draw,below=20pt of vectorize]	(end){End, return 0};
+
+			\draw[->]	(begin)--(countline);
+			\draw[->]	(countline)--(init);
+			\draw[->]	(init)--(skyline);
+			\draw[->]	(skyline)--(vectorize);
+			\draw[->]	(vectorize)--(end);
+		\end{tikzpicture}
+	\end{center}
+
+	在“Fetch the bitmap of the skyline”一步中，程序的主要操作较为复杂，涉及循环操作，故图示如下：
+
+	\begin{center}
+		\begin{tikzpicture}
+			\node[draw,rounded corners]	(begin){The Data of the rectangles are stored in a };
+			\node[draw,below=20pt of begin]	(countline){Count the line of the input file};
+			\node[draw,below=of countline]	(init){Initialize the base of the city};
+			\node[draw,below=of init]		(skyline){Fetch the bitmap of the skyline};
+			\node[draw,below=of skyline]	(vectorize){Find out the critical vector of the skyline};
+			\node[draw,below=20pt of vectorize]	(end){End};
+
+			\draw[->]	(begin)--(countline);
+			\draw[->]	(countline)--(init);
+			\draw[->]	(init)--(skyline);
+			\draw[->]	(skyline)--(vectorize);
+			\draw[->]	(vectorize)--(end);
+		\end{tikzpicture}
+	\end{center}
+
+	循环操作则出现在"Fetch the bitmap of the skyline"中。其流程如下：
+	\begin{center}
+		\includegraphics[width=12cm]{mindmap1.png}
+	\end{center}
+
 	\paragraph{read\_data}
 	这个函数的功能是逐行输出得到的数据，并未使用，仅用于调试。
 	\subsection{开发日志}
-	本项目从
+	项目的开发过程分为如下几个阶段：
+	\paragraph{项目确定}
+	项目来源于UVA的ACM模拟试题，并且有关问题确实在生产环境中有对应的需求。最终确定本项目遵循模块化原则，将多个函数分离，以便后续对程序代码进行改造和复用，具有可移植性。本项目从一定程度上运用了面向对象的思路，但是受到水平的局限性，故仍然以面向过程为主，没有使用C++特有的“类”，“多态”，“封装”与“继承”的思想。函数操作也以指针为主，并没有完全符合工程的需求，还有后续改造的空间。
+	\paragraph{程序编写}
+	本次项目的程序代码主要在2023年11月18日完成编写。在编写函数时，为了降低代码复杂度，所有的数组长度都已经在函数参数中被声明，而非调用stdarg标准库。事实上这样的编写方法可以直接地降低代码的复杂度，同时提升运行效率。
+	\paragraph{string和char$[ ]$} 在开发过程中，由于对于C++风格字符串和C语言风格字符串的用法不熟悉，在程序编写的过程中出现了一些问题。例如在文件流的模板中，在打开文件时文件名只接受字符数组，不接受C++的std::string。因此，后续改造文件时，也需要注意这一点，文件名应该是一个长度足够的字符数组，或者应该是一个分配了足够多内存的字符指针。
+	\paragraph{程序的优化} 在主函数中，为了增加程序的稳定性和异常情况应对能力，当输入文件无效时，程序返回-1代表程序异常退出，增加了可靠性。
 	\section{程序调试及运行}
 	\subsection{程序运行结果}
+	程序运行结果如下图：
+	\begin{center}
+		\includegraphics[width=14cm]{program-output.png}
+		当输入文件有效时，程序正常执行，否则返回255，即返回-1
+	\end{center}
+	加入少量调试代码后，可以清晰地展示出程序的执行流程，效果如下：
 	\subsection{程序使用说明}
 	\subsection{程序开发总结}
 	\section{附件（源程序）}
